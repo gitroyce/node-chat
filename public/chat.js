@@ -1,16 +1,20 @@
 window.onload = function() {
 
+    // init settings
     var messages = [];
     var socket = io.connect('http://107.21.230.220:3700');
 //    var socket = io.connect('http://localhost:3700');
+
+    // grab handles on DOM elements
     var name = document.getElementById("name");
     var field = document.getElementById("field");
     var sendButton = document.getElementById("send");
     var content = document.getElementById("content");
 
+    // respond to messages from server
     socket.on('message', function (data) {
         if(data.message) {
-            messages.push(data);
+            messages.push(data);    // accumulate messages
             var html = '';
             for(var i=0; i<messages.length; i+=1) {
                 html += '<b>';
@@ -18,13 +22,14 @@ window.onload = function() {
                 html += ': </b>';
                 html += messages[i].message + '<br />';
             }
-            content.innerHTML = html;
+            content.innerHTML = html;                   // update text field
             content.scrollTop = content.scrollHeight;
         } else {
             console.log("There is a problem: ", data);
         }
     });
 
+    // Form and send message JSON to server via web socket
     sendButton.onclick = sendMessage = function() {
         if(name.value == ""){
             alert("Please type your name!");
@@ -35,9 +40,10 @@ window.onload = function() {
         }
     };
 
+    // thanks jQuery for making some tedious shhtuff quick
     $(document).ready(function() {
-        $("#field").keyup(function(e) {
-            if(e.keyCode == 13)  sendMessage();
+        $("#field").keyup(function(e) {         // handle keypresses
+            if(e.keyCode == 13)  sendMessage(); // respond to 'Enter' key
         });
     });
 }
