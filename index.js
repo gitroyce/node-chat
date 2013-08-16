@@ -1,4 +1,4 @@
-// INIT SETTINGS
+// INIT APP, SETTINGS
 var express = require("express");
 var app = express();
 var port = 3700;
@@ -13,14 +13,17 @@ app.get("/", function(req, res){
     res.render("page");
 });
 
-
+// STATIC FILE LOCATION
 app.use(express.static(__dirname + '/public'));
-//app.use(express.static(path.join(__dirname, '/public')));
+
 
 
 // LAUNCH SERVER LISTENING
 var io = require('socket.io').listen(app.listen(port));
 
+
+
+// REACT TO CLIENT ACTIVITY
 io.sockets.on('connection', function (socket) {
     socket.emit('message', { message: 'Welcome to R\'s nodejs chat. Real-time socket messaging is best demonstrated by client connections in different locations.  Enjoy.' });
     socket.on('send', function (data) {
